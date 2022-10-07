@@ -14,16 +14,19 @@ page_number = 1
 web = webdriver.Chrome()
 web.get("https://www.amazon.eg/s?i=electronics&rh=n%3A21832883031&fs=true&page=1")
 
+# change language
 web.find_element(By.ID, "icp-nav-flyout").click()
 web.find_element(By.ID, "icp-language-translation-hint").click()
 web.find_element(By.ID, "icp-save-button").click()
 time.sleep(5)
 
+# get elements 
 names = web.find_elements(By.XPATH,
                           '//*[@id="search"]/div[1]/div[1]/div/span[3]/div[2]/div/div/div/div/div/div/div/h2/a/span')
 images = web.find_elements(By.CLASS_NAME, "s-image")
 links = web.find_elements(By.XPATH, '//*[@id="search"]/div[1]/div[1]/div/span[3]/div[2]/div/div/div/div/div/div/span/a')
 
+# extract data 
 for i in range(len(names)):
     mobile_name.append(names[i].text)
     m_img.append(images[i].get_dom_attribute('src'))
@@ -50,6 +53,8 @@ for x in url:
     print(f"{mobile_num} is done")
     mobile_num += 1
 print(len(m_price))
+
+#write data 
 df = pd.DataFrame({"Mobile image": m_img, "Mobile name": mobile_name, "Mobile price": m_price,"Details": details, "Mobile url": url})
 df.to_csv("amazon.csv", index=False)
 print("process is done")
